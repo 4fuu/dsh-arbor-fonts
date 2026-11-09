@@ -76,6 +76,22 @@ stylesheet when the Arbor page appears.
 On a profile with no browser connection (headless, acp, sdk) the Host plugin
 stays inactive and registers no route. Nothing changes on those profiles.
 
+### Hand the install to a model
+
+Install dsh-arbor first, following its
+[docs/install-for-agents.md](https://github.com/4fuu/dsh-arbor/blob/main/docs/install-for-agents.md).
+Then give a model this prompt, editing the bracketed parts:
+
+```text copy Copy Install Prompt
+Install dsh-arbor-fonts (https://github.com/4fuu/dsh-arbor-fonts) alongside
+dsh-arbor in a DSH web profile. Follow this repository's Install section and
+dsh-arbor's docs/install-for-agents.md for the host; run pnpm install
+--frozen-lockfile and pnpm check, add the Host row to the profile's
+cordis.patch.yml, and show me the Arbor overview with and without the plugin in
+light and dark at 1440 px. Report what changed, which font files were served,
+and anything that did not work.
+```
+
 ## DSH version
 
 The plugin is built for **`dsh-v0.2.2-rc.1`** (`@deepseek-ai/dsh@0.2.2-rc.1`).
