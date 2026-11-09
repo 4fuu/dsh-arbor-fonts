@@ -1,0 +1,14 @@
+{
+  "name": "dsh-arbor-fonts",
+  "private": true,
+  "type": "module",
+  "description": "A DeepSeek Harness client plugin that sets the fonts of the Arbor page through its typography contract",
+  "packageManager": "pnpm@11.28.5",
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=24.9.0"
+  }
+}
