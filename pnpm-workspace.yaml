@@ -1,2 +1,8 @@
 packages:
   - 'packages/*'
+
+# pnpm 11 refuses to finish an install while a package with an install script
+# is neither approved nor denied. esbuild's platform binary is a separate
+# dependency, so its postinstall is not needed here.
+allowBuilds:
+  esbuild: false

@@ -4,8 +4,13 @@
   "type": "module",
   "description": "A DeepSeek Harness client plugin that sets the fonts of the Arbor page through its typography contract",
   "packageManager": "pnpm@11.28.5",
+  "scripts": {
+    "build": "pnpm --filter @4fu/dsh-arbor-fonts build",
+    "check": "pnpm build && tsc --noEmit -p tsconfig.json && node --test --experimental-strip-types --no-warnings packages/dsh-arbor-fonts/test/routes.test.ts packages/dsh-arbor-fonts/test/client.test.ts packages/dsh-arbor-fonts/test/built.test.ts"
+  },
   "devDependencies": {
     "@types/node": "^26.6.6",
+    "esbuild": "0.28.2",
     "typescript": "^5.9.3"
   },
   "engines": {
