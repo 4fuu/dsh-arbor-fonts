@@ -1,94 +1,66 @@
 # dsh-arbor-fonts
 
-A DeepSeek Harness client plugin that sets the fonts of the Arbor page from
-[dsh-arbor](https://github.com/4fuu/dsh-arbor): ChillDIN Gothic for display text
-and ChillDIN for numerals. Body and code keep DSH's own fonts.
+An optional DeepSeek Harness client plugin that sets the typography of the
+Arbor page from [dsh-arbor](https://github.com/4fuu/dsh-arbor): **ChillDIN
+Gothic** for display labels and **ChillDIN** for numerals. Body text and code
+keep DSH's own fonts. Nothing else changes.
 
-DSH is pinned to the same versions dsh-arbor pins (`0.2.2-rc.1`). The plugin is
-one package under `packages/dsh-arbor-fonts`.
+The plugin is one package, `@4fu/dsh-arbor-fonts`. It is not required by
+dsh-arbor and has no effect on ordinary DSH pages.
 
-## The contract it relies on
+## What it changes
 
-dsh-arbor owns this; the plugin never goes beyond it.
+dsh-arbor owns the typography contract:
 
-- Every text node on the Arbor page and its session tabs carries
-  `data-arbor-text="body" | "display" | "numeric" | "code"`.
-- The Arbor root sets `--arbor-font-body`, `--arbor-font-display`,
-  `--arbor-font-numeric` and `--arbor-font-code`, defaulting to DSH's font
-  tokens.
+- every text node on the Arbor page and its session tabs carries
+  `data-arbor-text` = `body` | `display` | `numeric` | `code`;
+- the Arbor root sets `--arbor-font-body`, `--arbor-font-display`,
+  `--arbor-font-numeric` and `--arbor-font-code`, defaulting to DSH's own
+  font tokens.
 
-The plugin overrides only `--arbor-font-display` and `--arbor-font-numeric`,
-and only on `[data-arbor-page]` and `[data-arbor-text]` nodes. It never changes
-class names, structure, body text, code text or another style.
+This plugin overrides only `--arbor-font-display` and `--arbor-font-numeric`.
+The rules are scoped to `[data-arbor-page]` and to the contract-pinned
+`[data-arbor-text]` nodes, so an ordinary DSH element cannot match them:
 
-## Fonts
+- `display` becomes "Arbor ChillDIN Gothic" at its single 500 weight, with
+  `font-synthesis: none` so it is never synthetically bolded;
+- `numeric` becomes "Arbor ChillDIN" at weights 400, 500 and 600, with the
+  page's existing tabular numerals;
+- `body` and `code` are untouched.
 
-From [Warren2060/ChillDIN-ChillDINGothic](https://github.com/Warren2060/ChillDIN-ChillDINGothic)
-at commit `d5251e66ded29639397025784c72dc2ac12bc817`, SIL Open Font License
-1.1. Files, hashes and attribution are in `packages/dsh-arbor-fonts/fonts/`.
+The stylesheet is injected lazily, only after an Arbor root or a
+`[data-arbor-text]` node exists. A browser fetches a `@font-face` file only when
+a matching family is used, so a DSH page with no Arbor UI makes no font request
+from this plugin. The plugin's client bundle is still loaded with the normal DSH
+plugin graph; its `apply` only installs a `MutationObserver` until the page
+appears.
 
-- `display`: "Arbor ChillDIN Gothic", a full-CJK static face at weight 500,
-  falling back to the Arbor body token.
-- `numeric`: "Arbor ChillDIN" at weights 400, 500 and 600, Latin and numerals
-  only, with the same fallback.
-- `body` and `code`: untouched.
-- `font-display: swap` on every face; `font-synthesis: none` on display nodes so
-  the single Gothic weight is never synthetically bolded.
+## Screenshots
 
-There are no other fonts, and Smiley Sans / 得意黑 is not used.
+The same Arbor overview at 1440 px wide, without and with the plugin:
 
-## Lazy loading
+| Without the plugin | With the plugin, light |
+| --- | --- |
+| ![Arbor overview without the font plugin](docs/screenshots/overview-without-fonts.png) | ![Arbor overview with ChillDIN fonts](docs/screenshots/overview-with-fonts-light.png) |
 
-The client plugin installs a `MutationObserver` and appends its stylesheet only
-once an Arbor root or any `[data-arbor-text]` node exists. Browsers request a
-`@font-face` file only when a matching family is used, so a DSH page with no
-Arbor UI makes no request to `/api/arbor-fonts/` and gets no injected style. The
-plugin's client bundle itself still loads as part of the ordinary DSH plugin
-graph; that is DSH's module loading, not a font download.
+With the plugin, dark:
 
-## Serving the files
+![Arbor overview with ChillDIN fonts in dark mode](docs/screenshots/overview-with-fonts-dark.png)
 
-DSH's package asset route (`/plugins/<package>/assets/<path>` in
-`@deepseek-ai/dsh-client-modules`, `PACKAGE_ASSET_MEDIA_TYPES`) serves only
-`.svg`, `.png`, `.webp`, `.jpg` and `.jpeg`; `.woff`/`.woff2` answer 404.
-`@deepseek-ai/dsh-client-ui-theme`'s `lib/styles/brand-font.css` is not a
-public font route either: its woff2 files are bundled into the theme's own
-client artifact.
+The labels and numerals change; the body text, code, layout and colours are
+DSH's own.
 
-This plugin uses DSH's Host connection exact Fetch registry
-(`@deepseek-ai/dsh-client-connection`, `HostConnectionFetch.register`) — the
-same seam dsh-arbor uses for `/api/arbor/host`. It registers four exact routes
-under `/api/arbor-fonts/`, one per face, with:
+## Install
 
-- `font/woff` or `font/woff2` content type;
-- `cache-control: public, max-age=31536000, immutable`;
-- the full SHA-256 of the file as its ETag, and `304` handling;
-- the first 16 hex digits of that SHA-256 in the URL, so a URL names one exact
-  byte sequence and the immutable cache is honest.
+Requirements: the same DSH version dsh-arbor uses, a `web` profile with
+dsh-arbor installed, and the package built. The built `lib/index.js` and
+`client.js` are committed because a profile install does not run a build.
 
-On a profile with no browser connection (headless, acp, sdk) the Host plugin
-declares `inject = ['connection']`, stays inactive, and registers no route.
-
-## Commands
-
-```sh
-.agents/setup   # pinned pnpm and dependencies
-pnpm check      # build both halves, typecheck, run the tests
-pnpm build      # regenerate lib/index.js and client.js
-```
-
-`pnpm check` passes on a clean clone after `.agents/setup`. The tests cover the
-four routes (bytes, content types, caching, ETag/304, HEAD, refusals), the
-content-addressed manifest, the scoping/lazy CSS contract, and the built Host
-and browser entries.
-
-## Install in a DSH web profile
-
-```sh
+```bash
 dsh plugin --profile web add file:/absolute/path/to/packages/dsh-arbor-fonts
 ```
 
-Then insert the Host row into the profile's `cordis.patch.yml`:
+Then insert the Host row in the profile's `cordis.patch.yml`:
 
 ```yaml
 - insert:
@@ -96,28 +68,68 @@ Then insert the Host row into the profile's `cordis.patch.yml`:
       name: '@4fu/dsh-arbor-fonts'
 ```
 
-The package ships `lib/index.js` (the Host entry) and `client.js` (the browser
-entry), so a profile does not run a build. `src/index.ts`, `src/client.ts`,
-`src/routes.ts` and `src/font-manifest.ts` are the sources; `pnpm build` writes
-the two entries from them.
+Restart the profile. The package must be visible in the profile's
+`node_modules`; `dsh plugin add` writes the dependency. The Host half registers
+four exact Fetch routes under `/api/arbor-fonts/`; the browser half installs the
+stylesheet when the Arbor page appears.
 
-## Verification
+On a profile with no browser connection (headless, acp, sdk) the Host plugin
+stays inactive and registers no route. Nothing changes on those profiles.
 
-In a real DSH web profile with a fixture root carrying the four roles and the
-four default properties:
+## DSH version
 
-- computed `display` family resolves to `"Arbor ChillDIN Gothic"` and the
-  platform font is `ChillDINGothic Std`;
-- computed `numeric` family resolves to `"Arbor ChillDIN"` and the platform
-  font is `ChillDIN-Regular` (or the matching Medium/SemiBold face);
-- computed `body` and `code` keep DSH's token families;
-- the chat page records zero `.woff`/`.woff2` requests, and the four font
-  requests appear only after the fixture root mounts;
-- light and dark screenshots are captured from the same fixture.
+The plugin is built for **`dsh-v0.2.2-rc.1`** (`@deepseek-ai/dsh@0.2.2-rc.1`).
+The package manifest records that in `dsh.compatible`; DSH itself reads only
+`dsh.client`, and `pnpm check:pin` checks the recorded version. A different DSH
+version is unsupported: the plugin depends on DSH's exact Fetch registry
+(`HostConnectionFetch.register`) and on the Arbor page's contract. On another
+version it may register no route or answer 404 from another asset path. The
+same pin applies to dsh-arbor; see its
+[versions page](https://github.com/4fuu/dsh-arbor/blob/main/docs/versions.md).
 
-The `[data-arbor-page]` root marker is the one dsh-arbor's page carries today.
-The contract itself pins only `[data-arbor-text]`, so the plugin repeats the
-display/numeric values on the contract-pinned nodes; a deployment whose root
-marker differs still gets the fonts, but the values are then set per node
-instead of on the root. If dsh-arbor pins a different root marker, update
-`ROOT_SELECTOR` in `src/client.ts`.
+## Fonts and licensing
+
+The four vendored faces come from
+[Warren2060/ChillDIN-ChillDINGothic](https://github.com/Warren2060/ChillDIN-ChillDINGothic)
+at commit `d5251e66ded29639397025784c72dc2ac12bc817`, under the SIL Open Font
+License 1.1. The full OFL text is at
+[`packages/dsh-arbor-fonts/fonts/ChillDIN-OFL.txt`](packages/dsh-arbor-fonts/fonts/ChillDIN-OFL.txt);
+per-file SHA-256 values, families and weights are in
+[`packages/dsh-arbor-fonts/fonts/README.md`](packages/dsh-arbor-fonts/fonts/README.md).
+No font file was modified or subsetted.
+
+Attribution, as carried by the upstream files:
+
+> Copyright 2023 ChillType, with Reserved Font Name 'ChillDIN'
+> 'ChillDINGothic'. Copyright 2014-2021 Adobe (http://www.adobe.com/), with
+> Reserved Font Name 'Source'.
+
+The plugin's source code is MIT. The fonts are OFL-1.1. Both license texts and
+the attribution ship with the package; see [LICENSE](LICENSE) and
+[NOTICE](NOTICE).
+
+## Develop
+
+```bash
+.agents/setup   # pinned pnpm and dependencies
+pnpm check      # pin check, build, typecheck and tests
+pnpm build      # regenerate lib/index.js and client.js
+```
+
+`pnpm check` must pass on a clean clone after `.agents/setup`. The tests cover
+the four routes, the scoped selectors, the lazy installation and the built
+files; they fail when the manifest and the vendored files disagree.
+
+## Layout
+
+```text
+packages/dsh-arbor-fonts/
+  src/client.ts          the browser half: lazy stylesheet, scoped overrides
+  src/index.ts           the Host half: registers the exact Fetch routes
+  src/routes.ts          the four content-addressed font routes
+  src/font-manifest.ts   generated hashes, families, weights and URLs
+  fonts/                 the vendored faces, the OFL text and the attribution
+  lib/index.js           the built Host entry
+  client.js              the built browser entry
+  test/                  route, scoping and built-file tests
+```

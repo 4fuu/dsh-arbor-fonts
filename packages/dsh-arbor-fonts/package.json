@@ -14,18 +14,33 @@
     "src",
     "client.js",
     "fonts",
+    "LICENSE",
+    "NOTICE",
     "README.md"
   ],
   "dsh": {
     "client": {
       "platform": "web",
       "inject": []
-    }
+    },
+    "compatible": "0.2.2-rc.1"
   },
   "scripts": {
     "build": "node scripts/write-font-manifest.mjs && node build.mjs"
   },
   "devDependencies": {
     "esbuild": "0.28.2"
+  },
+  "license": "MIT AND OFL-1.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4fuu/dsh-arbor-fonts.git",
+    "directory": "packages/dsh-arbor-fonts"
+  },
+  "engines": {
+    "node": ">=24.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

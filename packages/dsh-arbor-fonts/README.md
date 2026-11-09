@@ -65,6 +65,22 @@ Then insert the Host row in the profile's `cordis.patch.yml`:
 Restart the profile. The package must be visible in the profile's
 `node_modules`; `dsh plugin add` writes the dependency.
 
+## DSH version
+
+Built for `dsh-v0.2.2-rc.1` (`@deepseek-ai/dsh@0.2.2-rc.1`). The manifest
+records it in `dsh.compatible`; `pnpm check:pin` checks it. Another DSH version
+is unsupported: the plugin uses DSH's exact Fetch registry and the Arbor page's
+`data-arbor-text` contract, and a move in either can leave the routes
+unregistered or the stylesheet unmatched.
+
+## License
+
+The plugin's source code is MIT. The vendored fonts in `fonts/` are licensed
+under the SIL Open Font License 1.1; the full OFL text is
+`fonts/ChillDIN-OFL.txt`, attribution and per-file hashes are in
+`fonts/README.md`, and the package-level summary is in `NOTICE`. The package as
+a whole is `MIT AND OFL-1.1`.
+
 ## Develop
 
 ```sh

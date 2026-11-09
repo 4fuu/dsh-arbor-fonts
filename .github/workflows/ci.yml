@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'b*']
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      # The plugin is built for dsh-v0.2.2-rc.1 (README); fail if the manifest
+      # pin drifts before building the bundles.
+      - name: Check the DSH pin
+        run: pnpm check:pin
+      - name: Build, typecheck and test
+        run: pnpm check

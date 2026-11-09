@@ -1,0 +1,28 @@
+dsh-arbor-fonts
+Copyright (c) 2026 4fuu
+
+Source code
+-----------
+
+The source code in this repository is licensed under the MIT License. The full
+text is in LICENSE.
+
+Vendored fonts
+--------------
+
+The font files under packages/dsh-arbor-fonts/fonts are licensed under the SIL
+Open Font License, Version 1.1. The full license text is vendored beside them at
+packages/dsh-arbor-fonts/fonts/ChillDIN-OFL.txt, and is included in the npm
+package's `fonts` directory.
+
+Upstream: https://github.com/Warren2060/ChillDIN-ChillDINGothic at commit
+d5251e66ded29639397025784c72dc2ac12bc817.
+
+Attribution, as carried by the upstream files:
+
+  Copyright 2023 ChillType, with Reserved Font Name 'ChillDIN' 'ChillDINGothic'.
+  Copyright 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name
+  'Source'.
+
+No font file was modified or subsetted. Per-file SHA-256 values, family names
+and weights are recorded in packages/dsh-arbor-fonts/fonts/README.md.
