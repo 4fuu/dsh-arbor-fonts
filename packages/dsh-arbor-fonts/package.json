@@ -22,8 +22,7 @@
     "client": {
       "platform": "web",
       "inject": []
-    },
-    "compatible": "0.2.2-rc.1"
+    }
   },
   "scripts": {
     "build": "node scripts/write-font-manifest.mjs && node build.mjs"
@@ -38,7 +37,8 @@
     "directory": "packages/dsh-arbor-fonts"
   },
   "engines": {
-    "node": ">=24.9.0"
+    "node": ">=24.9.0",
+    "dsh": "0.2.2-rc.1"
   },
   "publishConfig": {
     "access": "public"

@@ -68,7 +68,8 @@ Restart the profile. The package must be visible in the profile's
 ## DSH version
 
 Built for `dsh-v0.2.2-rc.1` (`@deepseek-ai/dsh@0.2.2-rc.1`). The manifest
-records it in `dsh.compatible`; `pnpm check:pin` checks it. Another DSH version
+records it in `engines.dsh`; DSH checks it as the plugin runtime requirement,
+and `pnpm check:pin` checks the recorded value. Another DSH version
 is unsupported: the plugin uses DSH's exact Fetch registry and the Arbor page's
 `data-arbor-text` contract, and a move in either can leave the routes
 unregistered or the stylesheet unmatched.

@@ -95,8 +95,8 @@ and anything that did not work.
 ## DSH version
 
 The plugin is built for **`dsh-v0.2.2-rc.1`** (`@deepseek-ai/dsh@0.2.2-rc.1`).
-The package manifest records that in `dsh.compatible`; DSH itself reads only
-`dsh.client`, and `pnpm check:pin` checks the recorded version. A different DSH
+The package manifest records that in `engines.dsh`; DSH checks it as the
+plugin runtime requirement, and `pnpm check:pin` checks the recorded version. A different DSH
 version is unsupported: the plugin depends on DSH's exact Fetch registry
 (`HostConnectionFetch.register`) and on the Arbor page's contract. On another
 version it may register no route or answer 404 from another asset path. The

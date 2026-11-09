@@ -8,7 +8,7 @@ one package, `packages/dsh-arbor-fonts`.
 
 ```sh
 .agents/setup   # pinned pnpm and dependencies
-pnpm check:pin  # dsh.compatible is dsh-v0.2.2-rc.1
+pnpm check:pin  # engines.dsh is dsh-v0.2.2-rc.1
 pnpm check      # pin check, build, typecheck and tests
 pnpm build      # src -> lib/index.js and client.js
 ```
