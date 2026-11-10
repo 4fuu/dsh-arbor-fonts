@@ -10,15 +10,15 @@ one package, `packages/dsh-arbor-fonts`.
 .agents/setup   # pinned pnpm and dependencies
 pnpm check:pin  # engines.dsh is dsh-v0.2.2-rc.1
 pnpm check      # pin check, build, typecheck and tests
-pnpm build      # src -> lib/index.js and client.js
+pnpm build      # src -> lib/index.js, lib/*.d.ts and client.js
 ```
 
 `pnpm check` must pass on a clean clone after `.agents/setup`. It builds both
 entries first: DSH installs the plugin into a profile's `node_modules`, where
-Node refuses to strip types, so the Host entry is built ESM (`lib/index.js`) and
-the browser entry is DSH's module-loader registration (`client.js`). `src/` is
-the source of truth; the two built files are committed because a profile install
-does not run a build.
+Node refuses to strip types, so the Host entry is built ESM (`lib/index.js`),
+its declarations are emitted to `lib/*.d.ts`, and the browser entry is DSH's
+module-loader registration (`client.js`). `src/` is the source of truth; the
+built files are committed because a profile install does not run a build.
 
 ## The contract this plugin relies on
 

@@ -7,7 +7,8 @@
   "scripts": {
     "check:pin": "node scripts/check-dsh-pin.mjs",
     "build": "pnpm --filter @4fu/dsh-arbor-fonts build",
-    "check": "node scripts/check-dsh-pin.mjs && pnpm build && tsc --noEmit -p tsconfig.json && node --test --experimental-strip-types --no-warnings packages/dsh-arbor-fonts/test/routes.test.ts packages/dsh-arbor-fonts/test/client.test.ts packages/dsh-arbor-fonts/test/built.test.ts"
+    "check": "node scripts/check-dsh-pin.mjs && pnpm build && tsc --noEmit -p tsconfig.json && node --test --experimental-strip-types --no-warnings packages/dsh-arbor-fonts/test/routes.test.ts packages/dsh-arbor-fonts/test/client.test.ts packages/dsh-arbor-fonts/test/built.test.ts",
+    "pack": "node scripts/publish.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",

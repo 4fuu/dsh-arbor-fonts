@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { test } from 'node:test'
-// @ts-expect-error the built Host entry is JavaScript and intentionally has no declarations.
 import * as host from '../lib/index.js'
 
 test('the built Host entry registers the routes on a connection', () => {

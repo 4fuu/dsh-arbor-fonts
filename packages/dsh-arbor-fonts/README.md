@@ -51,7 +51,7 @@ route is registered.
 ## Install in a DSH web profile
 
 ```sh
-dsh plugin --profile web add file:/absolute/path/to/packages/dsh-arbor-fonts
+dsh plugin --profile web add @4fu/dsh-arbor-fonts@2026.1110.0
 ```
 
 Then insert the Host row in the profile's `cordis.patch.yml`:
@@ -62,8 +62,9 @@ Then insert the Host row in the profile's `cordis.patch.yml`:
       name: '@4fu/dsh-arbor-fonts'
 ```
 
-Restart the profile. The package must be visible in the profile's
-`node_modules`; `dsh plugin add` writes the dependency.
+Restart the profile. `dsh plugin add` writes the dependency; the Host row
+mounts it. From a checkout, install the package directory with
+`dsh plugin --profile web add file:/absolute/path/to/packages/dsh-arbor-fonts`.
 
 ## DSH version
 

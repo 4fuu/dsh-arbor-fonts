@@ -1,17 +1,18 @@
 {
   "name": "@4fu/dsh-arbor-fonts",
-  "version": "0.0.0",
-  "private": true,
+  "version": "2026.1110.0",
   "type": "module",
   "description": "A DeepSeek Harness client plugin that sets the fonts of the Arbor page through its typography contract, and does nothing on ordinary pages",
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./client": "./client.js",
     "./package.json": "./package.json"
   },
   "files": [
     "lib",
-    "src",
     "client.js",
     "fonts",
     "LICENSE",
@@ -25,7 +26,7 @@
     }
   },
   "scripts": {
-    "build": "node scripts/write-font-manifest.mjs && node build.mjs"
+    "build": "node scripts/write-font-manifest.mjs && node build.mjs && tsc -p tsconfig.build.json && node ../../scripts/rewrite-declarations.mjs"
   },
   "devDependencies": {
     "esbuild": "0.28.2"
@@ -42,5 +43,7 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "types": "./lib/index.d.ts",
+  "main": "./lib/index.js"
 }

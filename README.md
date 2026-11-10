@@ -52,12 +52,14 @@ DSH's own.
 
 ## Install
 
-Requirements: the same DSH version dsh-arbor uses, a `web` profile with
-dsh-arbor installed, and the package built. The built `lib/index.js` and
-`client.js` are committed because a profile install does not run a build.
+Requirements: Node.js 24.9 or newer, DeepSeek Harness `dsh-v0.2.2-rc.1`, and a
+`web` profile with dsh-arbor installed. The npm package ships its built
+`lib/index.js`, `client.js` and `.d.ts` declarations; nothing has to be built
+after install.
 
 ```bash
-dsh plugin --profile web add file:/absolute/path/to/packages/dsh-arbor-fonts
+npm install -g @deepseek-ai/dsh@0.2.2-rc.1
+dsh plugin --profile web add @4fu/dsh-arbor-fonts@2026.1110.0
 ```
 
 Then insert the Host row in the profile's `cordis.patch.yml`:
@@ -68,10 +70,17 @@ Then insert the Host row in the profile's `cordis.patch.yml`:
       name: '@4fu/dsh-arbor-fonts'
 ```
 
-Restart the profile. The package must be visible in the profile's
-`node_modules`; `dsh plugin add` writes the dependency. The Host half registers
-four exact Fetch routes under `/api/arbor-fonts/`; the browser half installs the
-stylesheet when the Arbor page appears.
+Restart the profile. `dsh plugin add` writes the dependency; the Host row is
+what mounts it. The Host half registers four exact Fetch routes under
+`/api/arbor-fonts/`; the browser half installs the stylesheet when the Arbor
+page appears.
+
+From a checkout, install the package directory instead:
+
+```bash
+dsh plugin --profile web add file:/absolute/path/to/packages/dsh-arbor-fonts
+```
+
 
 On a profile with no browser connection (headless, acp, sdk) the Host plugin
 stays inactive and registers no route. Nothing changes on those profiles.
@@ -83,20 +92,20 @@ Install dsh-arbor first, following its
 Then give a model this prompt, editing the bracketed parts:
 
 ```text copy Copy Install Prompt
-Install dsh-arbor-fonts (https://github.com/4fuu/dsh-arbor-fonts) alongside
-dsh-arbor in a DSH web profile. Follow this repository's Install section and
-dsh-arbor's docs/install-for-agents.md for the host; run pnpm install
---frozen-lockfile and pnpm check, add the Host row to the profile's
-cordis.patch.yml, and show me the Arbor overview with and without the plugin in
-light and dark at 1440 px. Report what changed, which font files were served,
-and anything that did not work.
+Install dsh-arbor-fonts@2026.1110.0 (https://github.com/4fuu/dsh-arbor-fonts)
+alongside dsh-arbor in a DSH web profile. Follow this repository's Install
+section and dsh-arbor's docs/install-for-agents.md for the host; add the Host row
+to the profile's cordis.patch.yml, and show me the Arbor overview with and
+without the plugin in light and dark at 1440 px. Report what changed, which font
+files were served, and anything that did not work.
 ```
 
 ## DSH version
 
 The plugin is built for **`dsh-v0.2.2-rc.1`** (`@deepseek-ai/dsh@0.2.2-rc.1`).
 The package manifest records that in `engines.dsh`; DSH checks it as the
-plugin runtime requirement, and `pnpm check:pin` checks the recorded version. A different DSH
+plugin runtime requirement, and `pnpm check:pin` checks the recorded version.
+A different DSH
 version is unsupported: the plugin depends on DSH's exact Fetch registry
 (`HostConnectionFetch.register`) and on the Arbor page's contract. On another
 version it may register no route or answer 404 from another asset path. The
